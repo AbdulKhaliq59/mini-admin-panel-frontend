@@ -18,13 +18,6 @@ export default function Home() {
           </p>
         </div>
 
-        <Image
-          src="/globe.svg"
-          alt="Admin Panel Illustration"
-          width={600}
-          height={400}
-          className="rounded-lg shadow-lg"
-        />
       </main>
     </div>
   );

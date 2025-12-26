@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./providers/ThemeProvider";
+import { ReduxProvider } from "./providers/ReduxProvider";
+import { ThemeToggle } from "../components/ThemeToggle";
+import OAuthListener from "../components/OAuthListener";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,10 +29,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ReduxProvider>
+          <ThemeProvider>
+            <header className="flex items-center justify-between px-6 py-4 bg-indigo-600 text-white">
+              <Link href="/" className="font-semibold text-white">Admin Panel</Link>
+              <div className="flex items-center gap-4">
+                <Link href="/auth/login" className="text-indigo-100 text-sm">Sign in</Link>
+                <ThemeToggle />
+              </div>
+            </header>
+            <OAuthListener />
+            {children}
+          </ThemeProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
