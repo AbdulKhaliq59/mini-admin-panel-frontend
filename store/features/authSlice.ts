@@ -1,44 +1,37 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
-
-interface AuthState {
-  token: string | null;
-  status: AuthStatus;
-  error?: string | null;
-}
+import type { User, AuthStatus, AuthState } from "../../types/auth";
 
 const initialState: AuthState = {
-  token: null,
-  status: "unauthenticated",
-  error: null,
+  accessToken: null,
+  user: null,
+  status: "loading",
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCredentials(state, action: PayloadAction<{ token: string }>) {
-      state.token = action.payload.token;
+    setCredentials(state, action: PayloadAction<{ accessToken: string; user: User }>) {
+      state.accessToken = action.payload.accessToken;
+      state.user = action.payload.user;
       state.status = "authenticated";
-      state.error = null;
     },
-    clearCredentials(state) {
-      state.token = null;
-      state.status = "unauthenticated";
-      state.error = null;
-    },
-    setLoading(state) {
+    setToken(state, action: PayloadAction<string>) {
+      state.accessToken = action.payload;
       state.status = "loading";
-      state.error = null;
     },
-    setError(state, action: PayloadAction<{ error: string }>) {
+    setUser(state, action: PayloadAction<User>) {
+      state.user = action.payload;
+      state.status = "authenticated";
+    },
+    logout(state) {
+      state.accessToken = null;
+      state.user = null;
       state.status = "unauthenticated";
-      state.error = action.payload.error;
-      state.token = null;
     },
   },
 });
 
-export const { setCredentials, clearCredentials, setLoading, setError } = authSlice.actions;
+export const { setCredentials, setToken, setUser, logout } = authSlice.actions;
 export default authSlice.reducer;
+export type { User, AuthStatus };

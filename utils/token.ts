@@ -19,16 +19,19 @@ export const TokenService = {
     try {
       const hasWindow = typeof window !== "undefined";
       const hasSessionStorage = hasWindow && window.sessionStorage;
+
       if (persist && hasSessionStorage) {
         window.sessionStorage.setItem("access_token", token);
       }
       setCookie("access_token", token, 1);
     } catch (e) {
-      throw new Error("Storage error");
+      console.error("Failed to store token:", e);
     }
   },
+
   getToken() {
     if (inMemoryToken) return inMemoryToken;
+
     try {
       if (typeof window !== "undefined") {
         const t = window.sessionStorage.getItem("access_token");
@@ -43,14 +46,21 @@ export const TokenService = {
           return v;
         }
       }
-    } catch (e) { }
+    } catch (e) {
+      console.error("Failed to retrieve token from storage:", e);
+    }
     return null;
   },
+
   clear() {
     inMemoryToken = null;
     try {
-      if (typeof window !== "undefined" && window.sessionStorage) window.sessionStorage.removeItem("access_token");
+      if (typeof window !== "undefined" && window.sessionStorage) {
+        window.sessionStorage.removeItem("access_token");
+      }
       clearCookie("access_token");
-    } catch (e) { }
+    } catch (e) {
+      console.error("Failed to clear token from storage:", e);
+    }
   },
 };

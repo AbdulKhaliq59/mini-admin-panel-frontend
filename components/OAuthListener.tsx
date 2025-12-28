@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { TokenService } from "../utils/token";
 import { useAppDispatch } from "../store/hooks";
-import { setCredentials } from "../store/features/authSlice";
+import { setToken } from "../store/features/authSlice";
 
 export default function OAuthListener() {
   const dispatch = useAppDispatch();
@@ -16,13 +16,17 @@ export default function OAuthListener() {
     }
 
     function handler(e: MessageEvent) {
+      if (e.origin !== window.location.origin) {
+        return;
+      }
       if (isOAuthSuccessEvent(e)) {
         const token = e.data.access_token as string;
         TokenService.setToken(token, true);
-        dispatch(setCredentials({ token }));
+        dispatch(setToken(token));
         window.location.reload();
       }
     }
+
     window.addEventListener("message", handler);
     return () => window.removeEventListener("message", handler);
   }, [dispatch]);
