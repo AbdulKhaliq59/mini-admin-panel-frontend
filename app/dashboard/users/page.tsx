@@ -11,11 +11,10 @@ import {
   useCreateUserMutation,
   useUpdateUserMutation,
   useDeleteUserMutation,
-  useLazyExportUsersProtobufQuery,
   useGetPublicKeyQuery,
-} from "@/store/services/api";
+  useLazyExportUsersProtobufQuery,
+} from "@/store/services/users";
 import { User, CreateUserRequest } from "@/types/user";
-import * as protobuf from "protobufjs";
 import { hashEmail, verifyUserSignature } from "@/utils/crypto";
 import { toast } from "sonner";
 import { decodeProtobuf } from "@/utils/proto";
