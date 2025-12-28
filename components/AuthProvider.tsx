@@ -3,8 +3,8 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setToken, setUser, logout } from "../store/features/authSlice";
-import { useGetProfileQuery } from "../store/services/api";
 import { TokenService } from "../utils/token";
+import { useGetProfileQuery } from "@/store/services/auth";
 
 function useTokenInitialization() {
   const dispatch = useAppDispatch();

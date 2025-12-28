@@ -2,8 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useInitiateGoogleAuthMutation } from "@/store/services/api";
 import { useAuth } from "@/hooks/useAuth";
+import { useInitiateGoogleAuthMutation } from "@/store/services/auth";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 

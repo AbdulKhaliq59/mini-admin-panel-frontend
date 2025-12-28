@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../store";
-import type { User } from "../../types/auth";
 
 const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:4000";
 
@@ -16,19 +15,6 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["User"],
-  endpoints: (builder) => ({
-    getProfile: builder.query<User, void>({
-      query: () => "/auth/profile",
-      providesTags: ["User"],
-    }),
-    initiateGoogleAuth: builder.mutation<{ url: string }, void>({
-      queryFn: () => {
-        const url = `${baseUrl}/auth/google`;
-        return { data: { url } };
-      },
-    }),
-  }),
+  tagTypes: ["User", "Users"],
+  endpoints: () => ({}),
 });
-
-export const { useGetProfileQuery, useInitiateGoogleAuthMutation } = api;

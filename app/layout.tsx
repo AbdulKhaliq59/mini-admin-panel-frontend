@@ -3,11 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "./providers/ThemeProvider";
 import { ReduxProvider } from "./providers/ReduxProvider";
-import { ThemeToggle } from "../components/ThemeToggle";
 import OAuthListener from "../components/OAuthListener";
 import { AuthProvider } from "../components/AuthProvider";
-import { AuthNav } from "../components/AuthNav";
-import Link from "next/link";
+import { Toaster } from "../components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,13 +33,7 @@ export default function RootLayout({
         <ReduxProvider>
           <ThemeProvider>
             <AuthProvider>
-              <header className="flex items-center justify-between px-6 py-4 bg-indigo-600 text-white">
-                <Link href="/" className="font-semibold text-white">Admin Panel</Link>
-                <div className="flex items-center gap-4">
-                  <AuthNav />
-                  <ThemeToggle />
-                </div>
-              </header>
+              <Toaster richColors position="top-right" />
               <OAuthListener />
               {children}
             </AuthProvider>
