@@ -54,11 +54,11 @@ export function UserForm({ open, onClose, onSubmit, user, isLoading }: UserFormP
 
   useEffect(() => {
     if (user) {
-      const normalizedRole = typeof user.role === 'string' && user.role in UserRole 
-        ? UserRole[user.role.toUpperCase() as keyof typeof UserRole]
+      const normalizedRole = Object.values(UserRole).includes(user.role)
+        ? user.role
         : UserRole.USER;
-      const normalizedStatus = typeof user.status === 'string' && user.status in UserStatus
-        ? UserStatus[user.status.toUpperCase() as keyof typeof UserStatus]
+      const normalizedStatus = Object.values(UserStatus).includes(user.status as UserStatus)
+        ? user.status as UserStatus
         : UserStatus.ACTIVE;
 
       reset({

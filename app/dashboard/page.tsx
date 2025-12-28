@@ -8,10 +8,12 @@ const calculateTotalUsers = (stats: Array<{ count: number }> | undefined) =>
   stats?.reduce((sum, s) => sum + s.count, 0) || 0;
 
 const calculateAverageDaily = (stats: Array<{ count: number }> | undefined) =>
-  stats ? Math.round(stats.reduce((sum, s) => sum + s.count, 0) / stats.length) : 0;
+  stats && stats.length > 0
+    ? Math.round(stats.reduce((sum, s) => sum + s.count, 0) / stats.length)
+    : 0;
 
 const calculatePeakDay = (stats: Array<{ count: number }> | undefined) =>
-  stats ? Math.max(...stats.map(s => s.count)) : 0;
+  stats && stats.length > 0 ? Math.max(...stats.map(s => s.count)) : 0;
 
 const getTodayCount = (stats: Array<{ count: number }> | undefined) =>
   stats && stats.length > 0 ? stats[stats.length - 1].count : 0;

@@ -18,6 +18,9 @@ import { User, CreateUserRequest } from "@/types/user";
 import * as protobuf from "protobufjs";
 import { hashEmail, verifyUserSignature } from "@/utils/crypto";
 import { toast } from "sonner";
+import { decodeProtobuf } from "@/utils/proto";
+
+const PAGE_SIZE = 10;
 
 export default function UsersPage() {
   const [page, setPage] = useState(1);
@@ -25,7 +28,7 @@ export default function UsersPage() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const { data: usersData, isLoading } = useGetUsersQuery({ page, limit: 10 });
+  const { data: usersData, isLoading } = useGetUsersQuery({ page, limit: PAGE_SIZE });
   const { data: publicKeyData } = useGetPublicKeyQuery();
   const [createUser, { isLoading: isCreating }] = useCreateUserMutation();
   const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation();
@@ -102,45 +105,31 @@ export default function UsersPage() {
     URL.revokeObjectURL(url);
   };
 
-  const decodeProtobuf = async (arrayBuffer: ArrayBuffer) => {
-    const protoDefinition = `
-      syntax = "proto3";
-      message User {
-        string id = 1;
-        string email = 2;
-        string role = 3;
-        string status = 4;
-        string emailHash = 5;
-        string signature = 6;
-        string createdAt = 7;
-      }
-      message UserList {
-        repeated User users = 1;
-      }
-    `;
 
-    const root = protobuf.parse(protoDefinition).root;
-    const UserList = root.lookupType("UserList");
-    return UserList.decode(new Uint8Array(arrayBuffer)) as any;
-  };
 
   const verifyUsers = async (users: any[]): Promise<User[]> => {
     if (!publicKeyData?.publicKey) throw new Error("Public key not available");
 
-    const validUsers: User[] = [];
-    for (const user of users) {
-      const computedHash = await hashEmail(user.email);
-      const isValid = await verifyUserSignature(
-        computedHash,
-        user.signature,
-        publicKeyData.publicKey
-      );
+    const verificationPromises = users.map(async (user) => {
+      try {
+        const computedHash = await hashEmail(user.email);
+        const isValid = await verifyUserSignature(
+          computedHash,
+          user.signature,
+          publicKeyData.publicKey
+        );
 
-      if (isValid && computedHash === user.emailHash) {
-        validUsers.push(user);
+        if (isValid && computedHash === user.emailHash) {
+          return user;
+        }
+        return null
+      } catch (error) {
+        console.error("Failed to verify user", user.email, error);
+        return null;
       }
-    }
-    return validUsers;
+    });
+    const results = await Promise.all(verificationPromises);
+    return results.filter((user): user is User => user !== null);
   };
 
   return (

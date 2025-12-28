@@ -14,8 +14,8 @@ export interface User {
   id: string;
   email: string;
   fullName?: string;
-  role: UserRole | 'admin' | 'user';
-  status: UserStatus | 'active' | 'inactive';
+  role: UserRole;
+  status: UserStatus;
   emailHash?: string;
   signature?: string;
   createdAt: string;

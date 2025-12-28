@@ -30,7 +30,8 @@ export async function verifyUserSignature(
       { key: publicKey, padding: 1 },
       Buffer.from(signature, "base64")
     );
-  } catch {
+  } catch (err) {
+    console.error("Failed to verify user signature:", err);
     return false;
   }
 }
@@ -71,7 +72,8 @@ async function verifySignatureBrowser(
       signatureBytes,
       dataBytes
     );
-  } catch {
+  } catch (error) {
+    console.error("Failed to verify user signature in browser:", error);
     return false;
   }
 }
