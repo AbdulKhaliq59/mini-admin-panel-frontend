@@ -227,28 +227,6 @@ pnpm run dev
 - Route prefetching
 - API response caching
 
-## Deployment
-
-### Vercel (Recommended)
-
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
-
-### Docker
-
-```bash
-# Build image
-docker build -t admin-panel-frontend .
-
-# Run container
-docker run -p 3001:3001 admin-panel-frontend
-```
-
 ## Environment Variables for Production
 
 ```env
