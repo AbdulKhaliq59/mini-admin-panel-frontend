@@ -161,16 +161,6 @@ utils/
 npx shadcn@latest add [component-name]
 ```
 
-### Code Quality
-
-```bash
-# Run linter
-pnpm run lint
-
-# Type checking
-npx tsc --noEmit
-```
-
 ## API Integration
 
 The frontend communicates with the backend through RTK Query endpoints:
